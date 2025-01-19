@@ -21,6 +21,13 @@ const corsOptions = {
     credentials:true
 }
 
+
+app.get('/',(req,res)=>{
+    res.send({
+        activeStatus:true,
+        error:false,
+    })
+})
 app.use(cors(corsOptions));
 
 // Connect to database
