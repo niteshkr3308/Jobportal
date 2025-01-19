@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(cookieParser());
 const corsOptions = {
-    origin:'http://localhost:5173',
+    origin: 'https://next-hire-hub-ssn.netlify.app',
     credentials:true
 }
 
@@ -28,6 +28,7 @@ app.get('/',(req,res)=>{
         error:false,
     })
 })
+
 app.use(cors(corsOptions));
 
 // Connect to database
