@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Navbar from './shared/Navbar'
 import { Avatar, AvatarImage } from './ui/avatar'
 import { Button } from './ui/button'
@@ -10,13 +10,32 @@ import UpdateProfileDialog from './UpdateProfileDialog'
 import { useSelector } from 'react-redux'
 import useGetAppliedJobs from '@/hooks/useGetAppliedJobs'
 
-// const skills = ["Html", "Css", "Javascript", "Reactjs"]
+// Add apiUrl for dynamic backend URL from .env file
+const apiUrl = import.meta.env.VITE_SERVER_URL;  // This will get the backend API URL
+
 const isResume = true;
 
 const Profile = () => {
     useGetAppliedJobs();
     const [open, setOpen] = useState(false);
-    const {user} = useSelector(store=>store.auth);
+    const {user} = useSelector(store => store.auth);
+
+    // Function to fetch user data from backend (using apiUrl)
+    const fetchUserData = async () => {
+        try {
+            const response = await fetch(`${apiUrl}/api/v1/user/profile`);
+            const data = await response.json();
+            // Assuming you might want to set this data into state or use it
+            console.log(data);
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+        }
+    };
+
+    useEffect(() => {
+        // Call fetchUserData to load user profile data when the component mounts
+        fetchUserData();
+    }, []);
 
     return (
         <div>
