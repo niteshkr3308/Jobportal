@@ -14,43 +14,37 @@ const app = express();
 
 // middleware
 app.use(express.json());
-app.use(express.urlencoded({extended:true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+// Configure CORS for production and development environments
 const corsOptions = {
-    origin: 'https://next-hire-hub-ssn.netlify.app',
-    credentials:true
-}
-
-
-app.get('/',(req,res)=>{
-    res.send({
-        activeStatus:true,
-        error:false,
-    })
-})
+  origin: process.env.NODE_ENV === "production" ? "https://next-hire-hub-ssn.netlify.app" : "http://localhost:5173", // Update with your production URL
+  credentials: true,
+};
 
 app.use(cors(corsOptions));
+
+// Health Check Route (Optional)
+app.get("/", (req, res) => {
+  res.send({
+    activeStatus: true,
+    error: false,
+  });
+});
 
 // Connect to database
 connectDB();
 
 const PORT = process.env.PORT || 8001;
 
-// api's
+// API routes
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/company", companyRoute);
 app.use("/api/v1/job", jobRoute);
 app.use("/api/v1/application", applicationRoute);
 
-// ye hamara Api hoga postman me
-
-// "https://localhost:8000/api/v1/user/register"
-// "https://localhost:8000/api/v1/user/login"
-// "https://localhost:8000/api/v1/user/profile/update"
-
-
-
-app.listen(PORT,()=>{
-   
-    console.log(`Server running at port ${PORT}`);
+// Start server
+app.listen(PORT, () => {
+  console.log(`Server running at port ${PORT}`);
 });
